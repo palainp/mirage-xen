@@ -125,6 +125,16 @@ extern size_t malloc_footprint(void);
 CAMLprim value
 mirage_memory_get_live_words(value v_unit)
 {
+    struct mallinfo m = mallinfo();
+    return Val_long(m.uordblks / sizeof(value));
+}
+
+/*
+ * Caller: OS.Memory, @@noalloc
+ */
+CAMLprim value
+mirage_memory_get_fast_live_words(value v_unit)
+{
     return Val_long(malloc_footprint() / sizeof(value));
 }
 
