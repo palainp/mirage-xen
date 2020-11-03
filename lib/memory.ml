@@ -39,7 +39,6 @@ let stat () =
   let s = get_stack_words () in
   { heap_words = h; live_words = l; stack_words = s; free_words = h - l - s; }
 
-
 let quick_stat () =
   let h = get_heap_words () in
   let l = get_fast_live_words () in

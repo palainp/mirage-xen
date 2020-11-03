@@ -48,6 +48,10 @@ type stat = {
   free_words : int;  (** number of free (i.e. allocatable) words on the heap. *)
 }
 
+val stat: unit -> stat
+(** [stat ()]  returns memory allocation statistics. This call is slower
+    than quick_stat, and the returned values are accurate. *)
+
 val quick_stat: unit -> stat
 (** [quick_stat ()]  returns memory allocation statistics. This call is
     computationally cheap, but the returned values may not be completely
