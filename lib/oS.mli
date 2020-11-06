@@ -56,6 +56,10 @@ val quick_stat: unit -> stat
 (** [quick_stat ()]  returns memory allocation statistics. This call is
     computationally cheap, but the returned values may not be completely
     accurate. *)
+
+val trim: unit -> unit
+(** [trim ()]  release free memory from the heap (to update the value
+    returned by quick_state) *)
 end
 
 module Time : sig

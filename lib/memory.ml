@@ -26,6 +26,9 @@ external get_fast_live_words: unit -> int =
 external get_stack_words: unit -> int =
     "mirage_memory_get_stack_words" [@@noalloc]
 
+external trim: unit -> unit =
+    "mirage_trim_allocation" [@@noalloc]
+
 type stat = {
   heap_words: int;
   live_words: int;

@@ -140,6 +140,15 @@ mirage_memory_get_fast_live_words(value v_unit)
 
 /*
  * Caller: OS.Memory, @@noalloc
+ */
+CAMLprim value
+mirage_trim_allocation(value v_unit)
+{
+    return Val_long(malloc_trim(0));
+}
+
+/*
+ * Caller: OS.Memory, @@noalloc
  *
  * The implementation currently uses a hard-coded value for the stack guard
  * size; this must be kept in sync with nolibc's sbrk() implementation.
