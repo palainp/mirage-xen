@@ -32,6 +32,7 @@
 static char *unused_argv[] = { "mirage", NULL };
 static const char *solo5_cmdline = "";
 static size_t solo5_heap_size;
+static uintptr_t solo5_heap_start;
 static uintptr_t sp_at_start;
 
 CAMLprim value
@@ -118,6 +119,8 @@ mirage_memory_get_heap_words(value v_unit)
 }
 
 extern size_t malloc_footprint(void);
+extern void* sbrk(intptr_t);
+extern int malloc_trim(size_t pad);
 
 /*
  * Caller: OS.Memory, @@noalloc
@@ -135,7 +138,7 @@ mirage_memory_get_live_words(value v_unit)
 CAMLprim value
 mirage_memory_get_fast_live_words(value v_unit)
 {
-    return Val_long(malloc_footprint() / sizeof(value));
+    return Val_long(((uintptr_t)sbrk(0)-solo5_heap_start) / sizeof(value));
 }
 
 /*
@@ -171,6 +174,7 @@ int solo5_app_main(const struct solo5_start_info *si)
 
     sp_at_start = (uintptr_t)&dummy;
     _nolibc_init(si->heap_start, si->heap_size);
+    solo5_heap_start = si->heap_start;
     solo5_heap_size = si->heap_size;
     gnttab_init();
     solo5_cmdline = si->cmdline;
