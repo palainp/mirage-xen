@@ -26,6 +26,8 @@ external get_fast_live_words : unit -> int = "mirage_memory_get_fast_live_words"
 external get_stack_words : unit -> int = "mirage_memory_get_stack_words"
   [@@noalloc]
 
+external footprint : unit -> int = "mirage_footprint" [@@noalloc]
+
 external trim : unit -> unit = "mirage_trim_allocation" [@@noalloc]
 
 type stat = {

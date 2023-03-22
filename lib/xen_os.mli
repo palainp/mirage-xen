@@ -56,6 +56,10 @@ module Memory : sig
       precomputed value. This call is cheaper than {!stat}, but the returned
       values may not be completely accurate. *)
 
+  val footprint : unit -> int
+
+  (** [footprint ()] returns the memory taken for the heap *)
+
   val trim : unit -> unit
   (** [trim ()] release free memory from the heap (may update the value returned
       by {!quick_stat}) *)

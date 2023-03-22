@@ -163,6 +163,15 @@ mirage_memory_get_stack_words(value v_unit)
  * Caller: OS.Memory, @@noalloc
  */
 CAMLprim value
+mirage_footprint(value v_unit)
+{
+    return Val_long(malloc_footprint());
+}
+
+/*
+ * Caller: OS.Memory, @@noalloc
+ */
+CAMLprim value
 mirage_trim_allocation(value v_unit)
 {
     return Val_long(malloc_trim(0));
