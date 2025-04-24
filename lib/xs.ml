@@ -28,12 +28,12 @@ let get_xenstore_evtchn () =
   Eventchn.of_int @@ mirage_xen_get_xenstore_evtchn ()
 
 let get_xenstore_page () =
-  Cstruct.of_bigarray @@ mirage_xen_get_xenstore_page ()
+  Io_page.of_bigarray @@ mirage_xen_get_xenstore_page ()
 
 (* Mirage transport for XenStore. *)
 module IO = struct
   type 'a t = 'a Lwt.t
-  type channel = { mutable page : Cstruct.t; mutable evtchn : Eventchn.t }
+  type channel = { mutable page : Io_page.t; mutable evtchn : Eventchn.t }
 
   let return = Lwt.return
   let ( >>= ) = Lwt.bind
