@@ -1,7 +1,7 @@
 (library
  (name xen_os)
  (public_name mirage-xen)
- (libraries lwt cstruct xenstore.client shared-memory-ring-lwt lwt-dllist
+ (libraries lwt xenstore.client shared-memory-ring-lwt lwt-dllist
    mirage-profile logs io-page fmt mirage-runtime bheap duration metrics
    metrics-lwt)
  (no_dynlink)
