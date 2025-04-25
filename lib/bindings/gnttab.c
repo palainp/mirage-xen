@@ -384,8 +384,11 @@ mirage_xen_gnttab_grant_access(value v_ref, value v_iopage, value v_domid,
         value v_writable)
 {
     CAMLparam4(v_ref, v_iopage, v_domid, v_writable);
+    CAMLlocal2(v_ba, v_ofs);
     grant_ref_t ref = Int_val(v_ref);
-    uint64_t addr = (uint64_t)Caml_ba_data_val(v_iopage);
+    v_ba = Field(v_iopage, 0);
+    v_ofs = Field(v_iopage, 1);
+    uint64_t addr = (uint64_t)Caml_ba_data_val(v_ba) + Int_val(v_ofs);
     domid_t domid = Int_val(v_domid);
     bool readonly = !Bool_val(v_writable);
 
