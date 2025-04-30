@@ -53,6 +53,7 @@ module Log = (val Logs.src_log src : Logs.LOG)
 
 module Import = struct
   type t = { domid : domid; ref : Gntref.t }
+  type ba = (char, Bigarray.int8_unsigned_elt, Bigarray.c_layout) Bigarray.Array1.t
 
   module Local_mapping = struct
     type t = { hs : grant_handle list; pages : Io_page.t }
@@ -71,19 +72,19 @@ module Import = struct
   end
 
   external map_exn :
-    unit -> Gntref.t -> domid -> bool -> grant_handle * Io_page.t
+    unit -> Gntref.t -> domid -> bool -> grant_handle * ba
     = "mirage_xen_gnttab_map"
 
   let map_exn grant ~writable =
     let h, page = map_exn () grant.ref grant.domid writable in
-    Local_mapping.make [ h ] page
+    Local_mapping.make [ h ] (Io_page.of_bigarray page)
 
   let map grant ~writable =
     try Ok (map_exn grant ~writable)
     with ex -> Error (`Msg (Printexc.to_string ex))
 
   (* We must use a special mapv function to ensure the memory is mapped contiguously. *)
-  external mapv_exn : unit -> int array -> bool -> grant_handle * Io_page.t
+  external mapv_exn : unit -> int array -> bool -> grant_handle * ba
     = "mirage_xen_gnttab_mapv"
 
   let mapv_exn grants ~writable =
@@ -95,7 +96,7 @@ module Import = struct
         grant_array.((i * 2) + 1) <- g.ref)
       grants;
     let h, page = mapv_exn () grant_array writable in
-    Local_mapping.make [ h ] page
+    Local_mapping.make [ h ] (Io_page.of_bigarray page)
 
   let mapv gs ~writable =
     try Ok (mapv_exn gs ~writable)
